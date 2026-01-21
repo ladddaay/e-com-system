@@ -1,11 +1,13 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { CartContext } from "../cart-provider";
 import CartProductCard from "../components/cart-product-card";
 import CleanCartButton from "../components/clean-cart-button";
 import Button from "../components/ui/button";
+import CheckoutDialog from "../components/checkout-dialog";
 
 function CartPage() {
     const cartContext = useContext(CartContext);
+    const [checkoutDialog, setCheckoutDialog] = useState(false);
 
     return (
         <div className="h-[calc(100vh-50px)]">
@@ -19,9 +21,11 @@ function CartPage() {
 
                 <div className="flex gap-3">
                     <CleanCartButton />
-                    {cartContext.cart?.length &&
+                    {cartContext.cart?.length !== undefined &&
                         cartContext.cart?.length > 0 && (
-                            <Button>Checkout</Button>
+                            <Button onClick={() => setCheckoutDialog(true)}>
+                                Checkout
+                            </Button>
                         )}
                 </div>
             </div>
@@ -51,6 +55,12 @@ function CartPage() {
                     </div>
                 )}
             </div>
+
+            {checkoutDialog && (
+                <CheckoutDialog
+                    setCheckoutDialog={setCheckoutDialog}
+                />
+            )}
         </div>
     );
 }

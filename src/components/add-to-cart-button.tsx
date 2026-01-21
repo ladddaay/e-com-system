@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { CartContext } from "../cart-provider";
 import type { ProductType } from "../types/product-type";
-import GhostButton from "./ui/ghost-button";
+import Button from "./ui/button";
 
 type Props = {
     product: ProductType;
@@ -42,7 +42,9 @@ function AddToCartButon({ product }: Props) {
     };
 
     return (
-        <GhostButton onClick={() => handleOnClick()}>Add to cart</GhostButton>
+        <Button variant="ghost" onClick={() => handleOnClick()}>
+            Add to cart
+        </Button>
     );
 }
 

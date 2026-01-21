@@ -33,11 +33,9 @@ function Pulldown({ filterCategory, setFilterCategory }: Props) {
             <button
                 onClick={toggleMenu}
                 className="px-4 py-2 border rounded"
-                aria-haspopup="true"
-                aria-expanded={open}
                 type="button"
             >
-                {filterCategory}▼
+                {filterCategory} ▼
             </button>
 
             {open && (

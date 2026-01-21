@@ -1,19 +1,20 @@
+import { Moon, Sun } from "lucide-react";
 import { useContext } from "react";
 import { ThemeContext } from "../theme-provider";
-import GhostButton from "./ui/ghost-button";
-import { Moon, Sun } from "lucide-react";
+import Button from "./ui/button";
 
 function ThemeToggle() {
     const themeContext = useContext(ThemeContext);
 
     return (
-        <GhostButton
+        <Button
+            variant="ghost"
             onClick={() => {
                 themeContext.toggleTheme();
             }}
         >
             {themeContext.theme === "dark" ? <Moon /> : <Sun />}
-        </GhostButton>
+        </Button>
     );
 }
 

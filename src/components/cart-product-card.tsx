@@ -2,8 +2,8 @@ import { useContext } from "react";
 import { CartContext } from "../cart-provider";
 import { ThemeContext } from "../theme-provider";
 import type { CartProductType } from "../types/cart-product-type";
-import GhostButton from "./ui/ghost-button";
 import RemoveProductFromCartButton from "./remove-from-cart-button";
+import Button from "./ui/button";
 
 type Props = {
     product: CartProductType;
@@ -71,19 +71,21 @@ function CartProductCard({ product }: Props) {
                 <span>Quontity:</span>
                 <span>
                     <span className="border">
-                        <GhostButton
+                        <Button
+                            variant="ghost"
                             onClick={() => increaseQuontity(product.id)}
                         >
                             +
-                        </GhostButton>
+                        </Button>
                     </span>
                     <span className="px-3">{product.quantity}</span>
                     <span className="border">
-                        <GhostButton
+                        <Button
+                            variant="ghost"
                             onClick={() => decreaseQuontity(product.id)}
                         >
                             -
-                        </GhostButton>
+                        </Button>
                     </span>
                 </span>
             </div>

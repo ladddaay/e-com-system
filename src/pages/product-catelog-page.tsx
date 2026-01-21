@@ -6,7 +6,6 @@ import { useGetProducts } from "../hooks/useGetProducst";
 function ProductCatelogPage() {
     const [filterCategory, setFilterCategory] = useState<string>("All");
     const [searchString, setSearchString] = useState<string>("");
-
     const {
         data: products,
         isLoading,
