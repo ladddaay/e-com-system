@@ -1,18 +1,17 @@
-import useLocalStorage from "../hooks/useLocalstorage";
-import type { CartProductType } from "../types/cart-product-type";
+import { useContext } from "react";
+import { CartContext } from "../cart-provider";
 import type { ProductType } from "../types/product-type";
-import GhostButton from "./ui/ghost-button";
+import Button from "./ui/button";
 
 type Props = {
     product: ProductType;
 };
 
 function AddToCartButon({ product }: Props) {
-    const localStorage = useLocalStorage();
+    const cartContext = useContext(CartContext);
 
     const handleOnClick = () => {
-        const prevCart =
-            (localStorage.getItem("cart") as CartProductType[]) ?? [];
+        const prevCart = cartContext.cart ?? [];
 
         const alreadyAddedProduct = prevCart.find((x) => x.id === product.id);
 
@@ -27,9 +26,9 @@ function AddToCartButon({ product }: Props) {
                 return x;
             });
 
-            localStorage.setItem("cart", newCart);
+            cartContext.updateCart(newCart);
         } else {
-            localStorage.setItem("cart", [
+            cartContext.updateCart([
                 ...prevCart,
                 {
                     id: product.id,
@@ -43,7 +42,9 @@ function AddToCartButon({ product }: Props) {
     };
 
     return (
-        <GhostButton onClick={() => handleOnClick()}>Add to cart</GhostButton>
+        <Button variant="ghost" onClick={() => handleOnClick()}>
+            Add to cart
+        </Button>
     );
 }
 
