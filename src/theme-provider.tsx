@@ -9,7 +9,11 @@ const ThemeContext = createContext({
 const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     const localStorage = useLocalStorage();
     const [theme, setTheme] = useState(
-        (localStorage.getItem("theme") as string) ?? "dark",
+        (localStorage.getItem("theme") as string) ??
+            (window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light"),
     );
 
     useEffect(() => {

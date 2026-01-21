@@ -9,7 +9,7 @@ type Props = {
 
 function Navbar({ isOpen, setIsOpen }: Props) {
     return (
-        <div className={`border border-orange-600 h-screen w-[170px] absolute top-0 ${isOpen ? "left-0" : "-left-[170px]"} lg:w-[250px] lg:static flex flex-col bg-[#242424]`}>
+        <div className={`border border-orange-600 h-screen w-[170px] z-10 fixed top-0 ${isOpen ? "left-0" : "-left-[170px]"} lg:w-[250px] lg:fixed lg:top-0 lg:left-0 flex flex-col bg-[#242424]`}>
             <div className="ml-auto lg:hidden">
                 <GhostButton onClick={() => setIsOpen(false)}>
                     <X className="h-8 w-8" />

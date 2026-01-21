@@ -1,45 +1,36 @@
 import { useContext } from "react";
+import { ThemeContext } from "../theme-provider";
 import type { ProductType } from "../types/product-type";
-import { ThemeContext } from "../provider";
+import AddToCartButon from "./add-to-cart-button";
 
 type Props = {
     product: ProductType;
-    setProjecToEdit: React.Dispatch<
-        React.SetStateAction<ProductType | undefined>
-    >;
-    setEditProductDialog: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function ProductCard({
-    product,
-    setProjecToEdit,
-    setEditProductDialog,
-}: Props) {
+function ProductCard({ product }: Props) {
     const themeContext = useContext(ThemeContext);
 
     return (
         <div
             key={product.id}
-            className="border rounded-2xl px-4 py-2 w-[250px]"
+            className="border rounded-2xl px-4 py-2 w-full  md:w-[250px] flex flex-col gap-1"
         >
-            <div className="text-lg font-semibold flex justify-between">
-                <span
-                    className={`${themeContext.theme === "dark" ? "text-orange-800" : "text-amber-100"}`}
-                >
-                    {product.name}
-                </span>
-                <span>{product.price} Rupees</span>
+            <div
+                className={`${themeContext.theme === "dark" ? "text-orange-800" : "text-amber-100"}`}
+            >
+                {product.title}
             </div>
-            <div className="flex justify-between">
+            <div>{product.price} Rupees</div>
+            <div className="flex justify-between text-sm">
                 <span>Category:</span>
                 <span>{product.category}</span>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between text-sm">
                 <span>Stock Quontity:</span>
-                <span>{product.stockQuontity}</span>
+                <span>{product.stock}</span>
             </div>
             <div>
-                {product.stockQuontity < 5 && (
+                {product.stock < 5 && (
                     <div className="text-orange-600">Limited Quantity</div>
                 )}
             </div>
@@ -49,21 +40,13 @@ function ProductCard({
                 )}
             </div>
             <div>
-                {product.stockQuontity === 0 && (
+                {product.stock === 0 && (
                     <div className="text-red-600">Out of Stock</div>
                 )}
             </div>
-            <div>
-                <button
-                    type="button"
-                    className="border py-0.5 px-2 hover:cursor-pointer"
-                    onClick={() => {
-                        setProjecToEdit(product);
-                        setEditProductDialog(true);
-                    }}
-                >
-                    Edit
-                </button>
+
+            <div className="text-center">
+                <AddToCartButon product={product} />
             </div>
         </div>
     );
