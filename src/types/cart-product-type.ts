@@ -1,7 +1,7 @@
-export type ProductType = {
+export type CartProductType = {
     id: string;
     title: string;
     category: string;
     price: number;
-    stock: number;
+    quantity: number;
 };

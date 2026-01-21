@@ -1,98 +1,77 @@
-import { useState } from "react";
-import AddProductDialog from "../components/add-product-dialog";
+import { useEffect, useState } from "react";
 import CatalogFilters from "../components/catalog-filters";
-import EditProductDialog from "../components/eidt-product-dialog";
 import ProductCard from "../components/product-card";
-import Button from "../components/ui/button";
-import type { ProductType } from "../types/product-type";
+import { useGetProducts } from "../hooks/useGetProducst";
 
 function ProductCatelogPage() {
-    const [addProductDialog, setAddProductDialog] = useState<boolean>(false);
-    const [editProductDialog, setEditProductDialog] = useState<boolean>(false);
-    const [projectToEdit, setProjecToEdit] = useState<ProductType>();
-    const [filterCategory, setFilterCategory] = useState<string>();
+    const [filterCategory, setFilterCategory] = useState<string>("All");
     const [searchString, setSearchString] = useState<string>("");
 
-    const products = JSON.parse(
-        localStorage.getItem("products") ?? "[]",
-    ) as ProductType[];
+    const {
+        data: products,
+        isLoading,
+        error,
+    } = useGetProducts(filterCategory, searchString);
+
+    useEffect(() => {
+        setSearchString("");
+    }, [filterCategory]);
 
     return (
         <div className="h-[calc(100vh-50px)]">
             <div className="border-b w-full h-[100px] flex items-center justify-between px-5">
                 <div>
                     <h1 className="font-bold text-2xl">Product Catalog</h1>
-                    <p className="text-sm">
-                        Manage all the products in you catalog from here
-                    </p>
-                </div>
-
-                <div>
-                    <Button onClick={() => setAddProductDialog(true)}>
-                        + Add Product
-                    </Button>
+                    <p className="text-sm">List of all products</p>
                 </div>
             </div>
 
             <div className="border border-cyan-400 py-15 px-10 flex flex-col gap-4">
-                <div className="flex justify-between">
-                    <CatalogFilters
-                        searchString={searchString}
-                        setSearchString={setSearchString}
-                        productCategories={[
-                            ...new Set(products.map((x) => x?.category)),
-                        ]}
-                        filterProductCategory={filterCategory}
-                        setFilterProductCategory={setFilterCategory}
-                    />
-                </div>
+                <CatalogFilters
+                    searchString={searchString}
+                    setSearchString={setSearchString}
+                    filterProductCategory={filterCategory}
+                    setFilterProductCategory={setFilterCategory}
+                />
 
-                <div className="flex flex-wrap gap-5">
-                    {products.map((product) => {
-                        if (
-                            searchString &&
-                            !product.name
-                                .toLocaleLowerCase()
-                                .includes(
-                                    searchString.toLocaleLowerCase().trim(),
-                                )
-                        ) {
-                            return;
-                        }
+                {!isLoading && error && <div>{error}</div>}
 
-                        if (
-                            filterCategory &&
-                            product.category !== filterCategory
-                        ) {
-                            return;
-                        }
+                {!isLoading && !products && !error && <div>No Products</div>}
 
-                        return (
-                            <ProductCard
-                                key={product.id}
-                                product={product}
-                                setEditProductDialog={setEditProductDialog}
-                                setProjecToEdit={setProjecToEdit}
-                            />
-                        );
-                    })}
-                </div>
+                {isLoading && <div>loading...</div>}
+
+                {!isLoading && products && (
+                    <div className="flex flex-wrap gap-5">
+                        {products?.map((product) => {
+                            if (
+                                searchString &&
+                                !product.title
+                                    .toLocaleLowerCase()
+                                    .includes(
+                                        searchString.toLocaleLowerCase().trim(),
+                                    )
+                            ) {
+                                return;
+                            }
+
+                            if (
+                                filterCategory &&
+                                filterCategory !== "All" &&
+                                product.category !== filterCategory
+                            ) {
+                                return;
+                            }
+
+                            return (
+                                <ProductCard
+                                    key={product.id}
+                                    product={product}
+                                />
+                            );
+                        })}
+                    </div>
+                )}
             </div>
-
-            {addProductDialog && (
-                <AddProductDialog
-                    addProductDialog={addProductDialog}
-                    setAddProductDialog={setAddProductDialog}
-                />
-            )}
-
-            {editProductDialog && (
-                <EditProductDialog
-                    product={projectToEdit}
-                    addProductDialog={editProductDialog}
-                    setAddProductDialog={setEditProductDialog}
-                />
-            )}
         </div>
     );
 }

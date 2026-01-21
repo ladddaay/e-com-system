@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { ThemeContext } from "../provider";
+import { ThemeContext } from "../theme-provider";
 import GhostButton from "./ui/ghost-button";
 import { Moon, Sun } from "lucide-react";
 

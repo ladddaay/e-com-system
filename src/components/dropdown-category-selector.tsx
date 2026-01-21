@@ -1,16 +1,18 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useGetProductCategories } from "../hooks/useGetProductCategories";
+import { Check } from "lucide-react";
 
 type Props = {
-    items: string[];
     filterCategory: string | undefined;
-    setFilterCategory: React.Dispatch<React.SetStateAction<string | undefined>>;
+    setFilterCategory: React.Dispatch<React.SetStateAction<string>>;
 };
 
-function Pulldown({ items, filterCategory, setFilterCategory }: Props) {
+function Pulldown({ filterCategory, setFilterCategory }: Props) {
     const [open, setOpen] = useState<boolean>(false);
     const menuRef = useRef<HTMLDivElement | null>(null);
+    const { data: categories } = useGetProductCategories();
 
-    const toggleMenu = () => setOpen(prev => !prev);
+    const toggleMenu = () => setOpen((prev) => !prev);
 
     useEffect(() => {
         const handler = (e: MouseEvent) => {
@@ -35,31 +37,36 @@ function Pulldown({ items, filterCategory, setFilterCategory }: Props) {
                 aria-expanded={open}
                 type="button"
             >
-                Options ▼ ({filterCategory})
+                {filterCategory}▼
             </button>
 
             {open && (
                 <ul
-                    className="absolute mt-2 w-48 border rounded shadow bg-blue-900"
+                    className="absolute mt-2 w-48 border rounded shadow bg-blue-900 max-h-[300px] overflow-auto"
                     role="menu"
                 >
-                    {items.map((item, idx) => (
+                    {["All", ...(categories ?? [])]?.map((item, idx) => (
                         <li
                             key={idx}
-                            className="px-4 py-2 cursor-pointer"
+                            className="px-4 py-2 cursor-pointer flex items-center justify-between"
                             role="menuitem"
                             onClick={() => {
-                                setFilterCategory(item)
+                                setFilterCategory(item);
                                 setOpen(false);
                             }}
                         >
-                            {item}
+                            <span>{item}</span>
+                            <span>
+                                {filterCategory === item && (
+                                    <Check className="w-4 h-4" />
+                                )}
+                            </span>
                         </li>
                     ))}
                 </ul>
             )}
         </div>
     );
-}; 
+}
 
 export default Pulldown;
